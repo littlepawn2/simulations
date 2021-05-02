@@ -3,16 +3,17 @@ class Pendulum{
   
   int len;
   int mass;
-  
+  float dampFac;
   
   float angle;
   float vAngle = 0;
   float aAngle = 0;
   
-  Pendulum(int ilen, int imass){
+  Pendulum(int ilen, int imass, float iangle, float idampFac){
     len = ilen * 100;
     mass = imass;
-    angle = PI/4;
+    dampFac = idampFac;
+    angle = iangle;
   }
   
   void drawPendulum(PVector base){
@@ -27,6 +28,8 @@ class Pendulum{
   void movePendulum(){
     vAngle += aAngle;
     angle += vAngle;
+    
+    vAngle *= dampFac;
   }
   
   void simulatePendulum(){

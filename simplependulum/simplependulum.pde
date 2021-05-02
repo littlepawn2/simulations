@@ -1,7 +1,7 @@
 import java.util.*;
 
-Pendulum pendulum = new Pendulum(1, 3);
-Pendulum pendulum2 = new Pendulum(4, 3);
+Pendulum pendulum = new Pendulum(2, 3, PI/4, 1);
+Pendulum pendulum2 = new Pendulum(4, 1, PI/3, 0.99);
 PVector base = new PVector(400, 100);
 
 
