@@ -22,5 +22,8 @@ void draw(){
   pendulum.drawPendulum(base);
   pendulum.simulatePendulum();
   
+  pendulum2.drawPendulum(base);
+  pendulum2.simulatePendulum();
+  
   
 }
