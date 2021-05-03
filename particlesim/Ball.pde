@@ -31,14 +31,19 @@ class Ball{
     return false;
   }
   
+  boolean isWall(){
+    if ((pos.x + rad > 1000) || (pos.x - rad < 0) || (pos.y + rad > 1000) || (pos.y - rad < 0)){
+      return true;
+    }
+    return false;
+  }
+  
   void move(){
     vel.add(acc);
     pos.add(vel);
   }
   
   void wallHit(){
-    //takes force acting on the ball
-    //applies a force big enough to stop it
     if (pos.x + rad > 1000){
       pos.x = 1000 - rad;
       vel.x = -vel.x;
@@ -64,25 +69,43 @@ class Ball{
     return PVector.mult(acc, -1);
   }
   
+
   void collision(Ball ball){ //would preferably be static
     if (isCollide(ball)){
       
       //reflect vectors across normal
-      PVector collisionNormal = PVector.sub(this.pos, ball.pos).normalize();
+      PVector collisionNormal = PVector.sub(this.pos, ball.pos);
+      
+      //set positions
+      float posDifference = rad + ball.rad - PVector.dist(this.pos, ball.pos);
+      pos.add(collisionNormal.setMag(posDifference));
+      
       //swap for perpendicular vector
+      collisionNormal.normalize();
       float temp = collisionNormal.x;
       collisionNormal.x = collisionNormal.y;
       collisionNormal.y = temp;
       
       vel = PVector.sub(vel, PVector.mult(collisionNormal, PVector.dot(vel, collisionNormal)));
-      ball.vel = PVector.sub(ball.vel, PVector.mult(collisionNormal, PVector.dot(ball.vel, collisionNormal)));
+      ball.vel = PVector.sub(ball.vel, PVector.mult(collisionNormal, PVector.dot(ball.vel, collisionNormal))).mult(-1);
       
       //set velocity to correct mag
       vel.setMag( ((area-ball.area)/(area+ball.area)) * vel.mag() + ((2*ball.area)/(area+ball.area)) * ball.vel.mag() );
       ball.vel.setMag( ((2*area)/(area+ball.area)) * vel.mag() + ((ball.area-area)/(area+ball.area)) * ball.vel.mag() );
       
+      
+      
     }
     
   }
+  
+  
+  //void collision(Ball ball){
+  //  if (isCollide(ball)){
+  //    PVector force = PVector.sub(this.pos, ball.pos).mult(1);
+  //    vel = force;
+  //    ball.vel = force.mult(-1);
+  //  }
+  //}
   
 }

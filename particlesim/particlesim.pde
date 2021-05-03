@@ -18,13 +18,18 @@ void draw(){
     ball.drawBall();
     ball.applyForce(new PVector(0, 9.8));
     ball.wallHit();
+    for(int i=0; i<balls.size(); i++){
+      if(balls.get(i) != ball){
+        ball.collision(balls.get(i));
+      }
+    }
     ball.move();
   }
+  //for(int i=0; i<balls.size()-1; i++){
+  //  for(int j=i+1; j<balls.size(); j++){
+  //    balls.get(i).collision(balls.get(j));
+  //  }
+  //}
   
-  for(int i=0; i<balls.size()-1; i++){
-    for(int j=i+1; j<balls.size(); j++){
-      balls.get(i).collision(balls.get(j));
-    }
-  }
   
 }
