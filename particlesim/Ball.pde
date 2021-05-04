@@ -39,24 +39,33 @@ class Ball{
   }
   
   void move(){
+    print(acc);
     vel.add(acc);
     pos.add(vel);
+    
+    vel.mult(0.99);
+    acc.mult(0);
   }
   
   void wallHit(){
+    float slowFactor = 0.9;
     if (pos.x + rad > 1000){
       pos.x = 1000 - rad;
       vel.x = -vel.x;
+      vel.mult(slowFactor);
     } else if (pos.x - rad < 0){
       pos.x = rad;
       vel.x = -vel.x;
+      vel.mult(slowFactor);
     }
     if (pos.y + rad > 1000){
       pos.y = 1000 - rad;
       vel.y = -vel.y;
+      vel.mult(slowFactor);
     } else if (pos.y - rad < 0){
       pos.y = rad;
       vel.y = -vel.y;
+      vel.mult(slowFactor);
     }
   }
   
@@ -70,42 +79,52 @@ class Ball{
   }
   
 
-  void collision(Ball ball){ //would preferably be static
-    if (isCollide(ball)){
+  //void collision(Ball ball){ //would preferably be static
+  //  if (isCollide(ball)){
       
+  //    //reflect vectors across normal
+  //    PVector collisionNormal = PVector.sub(this.pos, ball.pos);
+      
+  //    //set positions
+  //    float posDifference = rad + ball.rad - PVector.dist(this.pos, ball.pos);
+  //    pos.add(collisionNormal.setMag(posDifference));
+      
+  //    //swap for perpendicular vector
+  //    collisionNormal.normalize();
+  //    float temp = collisionNormal.x;
+  //    collisionNormal.x = collisionNormal.y;
+  //    collisionNormal.y = temp;
+      
+  //    vel = PVector.sub(vel, PVector.mult(collisionNormal, PVector.dot(vel, collisionNormal)));
+  //    ball.vel = PVector.sub(ball.vel, PVector.mult(collisionNormal, PVector.dot(ball.vel, collisionNormal))).mult(-1);
+      
+  //    //set velocity to correct mag
+  //    vel.setMag( ((area-ball.area)/(area+ball.area)) * vel.mag() + ((2*ball.area)/(area+ball.area)) * ball.vel.mag() );
+  //    ball.vel.setMag( ((2*area)/(area+ball.area)) * vel.mag() + ((ball.area-area)/(area+ball.area)) * ball.vel.mag() );
+      
+      
+      
+  //  }
+    
+  //}
+  
+  
+  void collision(Ball ball){
+    if (isCollide(ball)){
       //reflect vectors across normal
-      PVector collisionNormal = PVector.sub(this.pos, ball.pos);
+      PVector force = PVector.sub(this.pos, ball.pos);
       
       //set positions
       float posDifference = rad + ball.rad - PVector.dist(this.pos, ball.pos);
-      pos.add(collisionNormal.setMag(posDifference));
+      ball.pos.add(force.setMag(-posDifference - 0.5));
       
-      //swap for perpendicular vector
-      collisionNormal.normalize();
-      float temp = collisionNormal.x;
-      collisionNormal.x = collisionNormal.y;
-      collisionNormal.y = temp;
+      //find mag of force
+      float forceMag = area * vel.mag() * vel.mag() / 8;
+      force.setMag(forceMag);
       
-      vel = PVector.sub(vel, PVector.mult(collisionNormal, PVector.dot(vel, collisionNormal)));
-      ball.vel = PVector.sub(ball.vel, PVector.mult(collisionNormal, PVector.dot(ball.vel, collisionNormal))).mult(-1);
-      
-      //set velocity to correct mag
-      vel.setMag( ((area-ball.area)/(area+ball.area)) * vel.mag() + ((2*ball.area)/(area+ball.area)) * ball.vel.mag() );
-      ball.vel.setMag( ((2*area)/(area+ball.area)) * vel.mag() + ((ball.area-area)/(area+ball.area)) * ball.vel.mag() );
-      
-      
-      
+      applyForce(PVector.mult(force, -1));
+      ball.applyForce(force);
     }
-    
   }
-  
-  
-  //void collision(Ball ball){
-  //  if (isCollide(ball)){
-  //    PVector force = PVector.sub(this.pos, ball.pos).mult(1);
-  //    vel = force;
-  //    ball.vel = force.mult(-1);
-  //  }
-  //}
   
 }
