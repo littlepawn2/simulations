@@ -3,7 +3,7 @@ import java.util.*;
 List<Ball> balls = new ArrayList();
 
 void setup(){
-  size(1000, 1000);
+  size(1000, 900);
   
   for (int i=0; i<5; i++){
     balls.add(new Ball());
