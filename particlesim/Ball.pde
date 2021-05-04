@@ -32,7 +32,7 @@ class Ball{
   }
   
   boolean isWall(){
-    if ((pos.x + rad > 1000) || (pos.x - rad < 0) || (pos.y + rad > 900) || (pos.y - rad < 0)){
+    if ((pos.x + rad > 1000) || (pos.x - rad < 0) || (pos.y + rad > 1000) || (pos.y - rad < 0)){
       return true;
     }
     return false;
@@ -58,8 +58,8 @@ class Ball{
       vel.x = -vel.x;
       vel.mult(slowFactor);
     }
-    if (pos.y + rad > 900){
-      pos.y = 900 - rad;
+    if (pos.y + rad > 1000){
+      pos.y = 1000 - rad;
       vel.y = -vel.y;
       vel.mult(slowFactor);
     } else if (pos.y - rad < 0){
